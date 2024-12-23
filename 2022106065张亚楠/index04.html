@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zyn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人AI知识库</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 新 Bootstrap5 核心 CSS 文件 -->
+	<link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+
+	<!-- 最新的 Bootstrap5 核心 JavaScript 文件 -->
+	<script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <style>
+        #main {
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+    <style>
+        .article-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .article-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .article-list li {
+            margin-bottom: 10px;
+        }
+
+        .article-list a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .article-list a:hover {
+            color: #007bff;
+        }
+
+        .article-content h1 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .article-content .meta {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .article-content .content {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .knowledge-card {
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .knowledge-card:hover {
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://featon0526.github.io/index.html">个人AI知识库</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index03.html">技术</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index04.html">项目</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index05.html">资源</a>
+                    </li>
+					<li class="nav-item">
+                        <a class="nav-link" href="index06.html">个人简介</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="搜索知识...">
+                    <button class="btn btn-outline-primary" type="submit">搜索</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <div class="container" style="margin-top: 80px;">
+        <div class="row">
+            <!-- 左侧分类导航 -->
+            <div class="col-md-3">
+                <div class="article-list">
+                    <h4>项目经验</h4>
+                    <ul>
+                        <li><a href="#">项目经验1</a></li>
+                        <li><a href="#">项目经验2</a></li>
+                        <li><a href="#">项目经验3</a></li>
+                        <li><a href="#">项目经验4</a></li>
+                        <li><a href="#">项目经验5</a></li>
+                    </ul>
+                </div>
+            </div>
+		</div>
+	</div>
+
+            <!-- 右侧内容展示 -->
+           
+    <div id="main" style="width:1200px; height:800px;"></div>
+    <script>
+        var chart = echarts.init(document.getElementById('main'));
+        
+        // 显示加载动画
+        chart.showLoading();
+
+        // 使用 jQuery 加载美国地图数据
+        $.get('https://raw.githubusercontent.com/shawnbot/topogram/master/data/us-states.geojson', function (usaJson) {
+            chart.hideLoading();
+            
+            // 解析 GeoJSON 数据
+            if (typeof usaJson === 'string') {
+                usaJson = JSON.parse(usaJson);
+            }
+
+            // 注册地图
+            echarts.registerMap('USA', usaJson);
+
+            // 配置选项
+            var option = {
+                backgroundColor: '#F7F7F7',
+                title: {
+                    text: '美国各州人口分布图',
+                    subtext: '数据来源：2020年人口普查',
+                    left: 'center',
+                    padding: 20,
+                    textStyle: {
+                        fontSize: 24,
+                        color: '#333'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}<br/>人口: {c} 百万'
+                },
+                visualMap: {
+                    left: 'right',
+                    min: 0,
+                    max: 40,
+                    inRange: {
+                        color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695']
+                    },
+                    text: ['高', '低'],
+                    calculable: true
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'left',
+                    top: 'top',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [{
+                    name: '美国人口',
+                    type: 'map',
+                    map: 'USA',
+                    roam: true,
+                    emphasis: {
+                        label: {
+                            show: true
+                        },
+                        itemStyle: {
+                            areaColor: '#f4e925'
+                        }
+                    },
+                    data: [
+                         {name:'Alabama',value:5.0},
+						{name:'Alaska',value:0.7},
+						{name:'Arizona',value:7.1},
+						{name:'Arkansas',value:3.0},
+						{name: 'California', value: 39.5},
+						{name:'Colorado',value:5.7},
+						{name:'Connecticut',value:3.6},
+						{name:'Delaware',value:0.9},
+						{name:'District of Columbia',value:0.7},
+						{name: 'Florida', value: 21.5},
+						{name: 'Georgia', value: 10.7},
+						{name:'Hawaii',value:1.4},
+						{name:'Idaho',value:1.8},
+						{name: 'Illinois', value: 12.7},
+						{name:'Indiana',value:6.7},
+						{name:'Iowa',value:3.2},
+						{name:'Kansas',value:2.9},
+						{name:'Kentucky',value:4.5},
+						{name:'Louisiana',value:4.6},
+						{name:'Maine',value:1.3},
+						{name:'Maryland',value:6.1},
+						{name:'Massachusetts',value:7.0},
+						{name:'Michigan',value:10.0},
+						{name:'Minnesota',value:5.7},
+						{name:'Mississippi',value:2.9},
+						{name:'Missouri',value:6.1},
+						{name:'Montana',value:1.0},
+						{name:'Nebraska',value:1.9},
+						{name:'Nevada',value:3.1},
+						{name:'New Hampshire',value:1.3},
+						{name:'New Jersey',value:9.3},
+						{name:'New Mexico',value:2.1},
+						{name:'New York',value:20.2},
+						{name:'North Carolina',value:10.4},
+						{name:'North Dakota',value:0.7},
+						{name:'Ohio',value:11.7},
+						{name:'Oklahoma',value:3.9},
+						{name:'Oregon',value:4.2},
+						{name:'Pennsylvania',value:13.0},
+						{name:'Rhode Island',value:1.0},
+						{name:'South Carolina',value:5.1},
+						{name:'South Dakota',value:0.8},
+						{name:'Tennessee',value:6.9},
+						{name:'Texas',value:29.1},
+						{name:'Utah',value:3.2},
+						{name:'Vermont',value:0.6},
+						{name:'Virginia',value:8.6},
+						{name:'Washington',value:7.7},
+						{name:'West Virginia',value:1.7},
+						{name:'Wisconsin',value:5.8},
+						{name:'Wyoming',value:0.5},
+						{name:'United States',value:33.1},
+						{name:'Northeast Region',value:57.6},
+						{name:'Midwest Region',value:68.9},
+						{name:'South Region',value:126.2},
+						{name:'West Region',value:78.5},
+						{name:'Puerto Rico',value:3.2}
+                        // ... 可以继续添加其他州的数据
+                    ],
+                    label: {
+                        show: true,
+                        fontSize: 10
+                    }
+                }]
+            };
+
+            // 使用配置项显示图表
+            chart.setOption(option);
+        });
+
+        // 添加响应式支持
+        window.addEventListener('resize', function() {
+            chart.resize();
+        });
+    </script>
+    <!-- 页脚 -->
+    <footer class="bg-light py-4 mt-1">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 个人AI知识库</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS 和依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
